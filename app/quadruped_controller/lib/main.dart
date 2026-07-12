@@ -39,8 +39,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String status = "Disconnected";
+  bool status = false;
   String moved = "";
+  double speed = 0;
+  void connect(bool value) => setState(() {
+    status = value;
+  });
   void front() => setState(() {
     moved = "前進";
   });
@@ -56,7 +60,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void stop() => setState(() {
     moved = "停止";
   });
-
+  void changeSpeed(double value) => setState(() {
+    speed = value;
+  });
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,9 +72,17 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           children: [
-            Padding(padding: EdgeInsets.all(16)),
-            Text(
-              status
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: SwitchListTile(
+                title: const Text("接続"),
+                value: status,
+                secondary: const SizedBox(
+                  width: 40,
+                  height: 80,
+                ),
+                onChanged: connect,
+              ),
             ),
             Text(moved),
             OutlinedButton(
@@ -97,6 +111,17 @@ class _MyHomePageState extends State<MyHomePage> {
             OutlinedButton(
               onPressed: stop,
               child: Text("停止")
+            ),
+            Column(
+              children: [
+                Text("${speed.toInt()}%"),
+                Slider(
+                  value: speed,
+                  onChanged: changeSpeed,
+                  min: 0,
+                  max: 100,
+                )
+              ]
             )
           ],
         ),
