@@ -72,15 +72,16 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.all(16),
+            Card(
               child: SwitchListTile(
-                title: const Text("接続"),
-                value: status,
-                secondary: const SizedBox(
-                  width: 40,
-                  height: 80,
+                secondary: Icon(
+                  status ? Icons.link : Icons.link_off,
                 ),
+                title: const Text("接続状態"),
+                subtitle: Text(
+                  status ? "Connected" : "Disconnected",
+                ),
+                value: status,
                 onChanged: connect,
               ),
             ),
