@@ -90,6 +90,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: const Text("右転")
                   ),
                   OutlinedButton(
+                    onPressed: stop,
+                    child: Text("停止")
+                  ),
+                  OutlinedButton(
                     onPressed: left,
                     child: const Text("左転")
                   )
@@ -99,10 +103,6 @@ class _MyHomePageState extends State<MyHomePage> {
             OutlinedButton(
               onPressed: back,
               child: const Text("後進")
-            ),
-            OutlinedButton(
-              onPressed: stop,
-              child: Text("停止")
             ),
             Column(
               children: [
