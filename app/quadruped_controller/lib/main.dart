@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'widgets/connection_card.dart';
+import 'widgets/control_pad.dart';
+import 'widgets/speed_slider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -63,57 +66,18 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           children: [
-            Card(
-              child: SwitchListTile(
-                secondary: Icon(
-                  status ? Icons.link : Icons.link_off,
-                ),
-                title: const Text("接続状態"),
-                subtitle: Text(
-                  status ? "Connected" : "Disconnected",
-                ),
-                value: status,
-                onChanged: connect,
-              ),
-            ),
+            ConnectionCard(status:status, onChanged: connect,),
             Text(moved),
-            OutlinedButton(
-              onPressed: front, 
-              child: const Text("前進")
+            ControlPad(
+              onForward: front,
+               onBackward: back, 
+               onLeft: left, 
+               onRight: right, 
+               onStop: stop
             ),
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  OutlinedButton(
-                    onPressed: right,
-                    child: const Text("右転")
-                  ),
-                  OutlinedButton(
-                    onPressed: stop,
-                    child: Text("停止")
-                  ),
-                  OutlinedButton(
-                    onPressed: left,
-                    child: const Text("左転")
-                  )
-                ]
-              ),
-            ),
-            OutlinedButton(
-              onPressed: back,
-              child: const Text("後進")
-            ),
-            Column(
-              children: [
-                Text("${speed.toInt()}%"),
-                Slider(
-                  value: speed,
-                  onChanged: changeSpeed,
-                  min: 0,
-                  max: 100,
-                )
-              ]
+            SpeedSlider(
+              speed: speed, 
+              onChanged: changeSpeed,
             )
           ],
         ),
