@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'widgets/connection_card.dart';
-import 'widgets/control_pad.dart';
-import 'widgets/speed_slider.dart';
+import 'screens/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,69 +17,6 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: const MyHomePage(title: 'Remoto Controller Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  bool status = false;
-  String moved = "";
-  double speed = 0;
-  void connect(bool value) => setState(() {
-    status = value;
-  });
-  void front() => setState(() {
-    moved = "前進";
-  });
-  void right() => setState(() {
-    moved = "右転";
-  }); 
-  void left() => setState(() {
-    moved = "左転";
-  });
-  void back() => setState(() {
-    moved = "後進";
-  });
-  void stop() => setState(() {
-    moved = "停止";
-  });
-  void changeSpeed(double value) => setState(() {
-    speed = value;
-  });
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("遠隔操作パネル"),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            ConnectionCard(status:status, onChanged: connect,),
-            Text(moved),
-            ControlPad(
-              onForward: front,
-               onBackward: back, 
-               onLeft: left, 
-               onRight: right, 
-               onStop: stop
-            ),
-            SpeedSlider(
-              speed: speed, 
-              onChanged: changeSpeed,
-            )
-          ],
-        ),
-      )
     );
   }
 }
