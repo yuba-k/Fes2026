@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../widgets/connection_card.dart';
 import '../widgets/control_pad.dart';
 import '../widgets/speed_slider.dart';
+import '../services/robot_controller.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -17,24 +18,41 @@ class _MyHomePageState extends State<MyHomePage> {
   bool status = false;
   String moved = "";
   double speed = 0;
+  final RobotController robot = RobotController();
+
   void connect(bool value) => setState(() {
     status = value;
   });
-  void front() => setState(() {
-    moved = "前進";
-  });
-  void right() => setState(() {
-    moved = "右転";
-  }); 
-  void left() => setState(() {
-    moved = "左転";
-  });
-  void back() => setState(() {
-    moved = "後進";
-  });
-  void stop() => setState(() {
-    moved = "停止";
-  });
+  void front(){
+      robot.moveForward();
+      setState(() {
+        moved = "前進";
+    });
+  }
+  void right() {
+    robot.turnRight();
+    setState(() {
+      moved = "右転";
+    });
+  } 
+  void left() {
+    robot.turnLeft();
+    setState(() {
+      moved = "左転";
+    });
+  }
+  void back(){
+    robot.moveBackward();
+    setState(() {
+      moved = "後進";
+    });
+  }
+  void stop() {
+    robot.stop();
+    setState(() {
+      moved = "停止";
+    });
+  }
   void changeSpeed(double value) => setState(() {
     speed = value;
   });
