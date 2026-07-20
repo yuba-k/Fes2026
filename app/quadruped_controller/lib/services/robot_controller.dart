@@ -1,17 +1,19 @@
+import '../services/wifi_service.dart';
 class RobotController {
+  final WifiService communication = WifiService();
   void moveForward(){
-    print("F");
+    communication.send("F");
   }
   void moveBackward(){
-    print("B");
+    communication.send("B");
   }
   void turnLeft(){
-    print("L");
+    communication.send("L");
   }
   void turnRight(){
-    print("R");
+    communication.send("R");
   }
   void stop(){
-    print("S");
+    communication.send("S");
   }
 }
