@@ -20,14 +20,24 @@ class WifiService {
   }
 
   Future<void> disconnect() async {
-    _socket?.close();
+    await _socket?.close();
     _socket = null;
     _connected = false;
     print("Disconnected");
   }
 
   Future<void> send(String command) async{
-    _socket?.write(command);
-    print("send: $command");
+    if (!_connected){
+      print("Not Connected");
+      return;
+    }
+    try{
+      _socket?.write("$command\n");
+      await _socket?.flush();
+      print("send: $command");
+    }catch(e){
+      print("Send Failed: $e");
+      _connected = false;
+    }
   }
 }
