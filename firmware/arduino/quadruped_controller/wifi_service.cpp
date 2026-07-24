@@ -1,5 +1,5 @@
-#include "wifi_service.h";
-#include "wifi_config.h";
+#include "wifi_service.h"
+#include "wifi_config.h"
 
 void WifiService::begin(){
     Serial.print("Connection to Wifi");
