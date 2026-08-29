@@ -20,9 +20,21 @@ class _MyHomePageState extends State<MyHomePage> {
   double speed = 0;
   final RobotController robot = RobotController();
 
-  void connect(bool value) => setState(() {
-    status = value;
-  });
+  Future<void> connect(bool value) async {
+    if (value) {
+      await robot.connect();
+
+      setState(() {
+        status = true;
+      });
+    } else {
+      await robot.disconnect();
+
+      setState(() {
+        status = false;
+      });
+    }
+  }
   void front(){
       robot.moveForward();
       setState(() {
