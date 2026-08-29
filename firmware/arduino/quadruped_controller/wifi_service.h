@@ -3,10 +3,12 @@
 
 #include <WiFiNINA.h>
 class WifiService{
-    WiFiServer server;
     public:
+        WifiService();
         void begin();
+        void update();
+    private:
+        WiFiServer server;
+        WiFiClient client;
 };
-WifiService::WifiService()
-    :server(SERVER_PORT);
 #endif
