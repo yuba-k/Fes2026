@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Joystick extends StatefulWidget {
-  const Joystick({super.key, required this.size, required this.onChanged});
+  const Joystick({
+    super.key,
+    required this.size,
+    required this.onChanged,
+    this.deadZone = 0.1,
+  });
+  final double deadZone;
   final double size;
   final void Function(double x, double y) onChanged;
 
@@ -23,6 +29,21 @@ class _JoystickState extends State<Joystick>{
     setState(() {
       _knob = v;
     });
+
+    final nx = v.dx / maxR;
+    final ny = -v.dy / maxR;
+    if(v.distance/maxR < widget.deadZone){
+      widget.onChanged(0, 0);
+    }else{
+      widget.onChanged(nx, ny);
+    }
+  }
+
+  void _reset(){
+    setState(() {
+      _knob = Offset.zero;
+      widget.onChanged(0, 0);
+    });
   }
 
   @override
@@ -34,6 +55,8 @@ class _JoystickState extends State<Joystick>{
         behavior: HitTestBehavior.opaque,
         onPanStart: (d) => _update(d.localPosition),
         onPanUpdate: (d) => _update(d.localPosition),
+        onPanEnd: (_) => _reset(),
+        onPanCancel: () => _reset(),
         child: Stack(
           children:[
             Container(
