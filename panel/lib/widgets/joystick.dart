@@ -42,8 +42,8 @@ class _JoystickState extends State<Joystick>{
   void _reset(){
     setState(() {
       _knob = Offset.zero;
-      widget.onChanged(0, 0);
     });
+    widget.onChanged(0, 0);
   }
 
   @override
