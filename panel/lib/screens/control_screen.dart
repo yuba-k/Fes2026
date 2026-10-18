@@ -50,6 +50,20 @@ class _ControlPageState extends State<ControlPage> {
               },
             ),
             Text('X: ${_x.toStringAsFixed(2)}  Y: ${_y.toStringAsFixed(2)}'),
+            ValueListenableBuilder<bool>(
+              valueListenable: _link.connected,
+              builder: (context, connected, child){
+                return Text(connected ? "接続中" : "切断");
+              }
+            ),
+            ValueListenableBuilder(
+              valueListenable: _link.batteryMv,
+              builder: (context, mv, child){
+                return Text(
+                  mv == null ? "電池：--" : "電池：${(mv/1000).toStringAsFixed(2)}V",
+                );
+              }
+            )
           ],
         ),
       ),
