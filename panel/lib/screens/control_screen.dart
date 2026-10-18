@@ -20,7 +20,6 @@ class _ControlPageState extends State<ControlPage> {
   @override
   void initState() {
     super.initState();
-    _state.mode = Mode.remote;
     _link = RobotLink(_state);
     _link.start("127.0.0.1", 8888);
 
@@ -39,6 +38,32 @@ class _ControlPageState extends State<ControlPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            SegmentedButton(
+              segments: [
+                ButtonSegment(value: Mode.stop, label:Text("停止")),
+                ButtonSegment(value: Mode.auto, label:Text("自律")),
+                ButtonSegment(value: Mode.remote, label:Text("遠隔")),
+              ],
+              selected: {_state.mode},
+              onSelectionChanged: (set){
+                setState(() {
+                  _state.setMode(set.first);
+                });
+              },
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(200, 60),
+              ),
+              onPressed: () {
+                setState(() {
+                  _state.stop();
+                });
+              },
+              child: const Text("緊急停止"),
+            ),
             Joystick(
               size: 200,
               onChanged: (x, y) {
