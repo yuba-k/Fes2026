@@ -11,8 +11,26 @@ class ControlPage extends StatefulWidget {
 }
 
 class _ControlPageState extends State<ControlPage> {
+  final _state = ControlState();
+  late final RobotLink _link;
+
   double _x = 0;
   double _y = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _state.mode = Mode.remote;
+    _link = RobotLink(_state);
+    _link.start("127.0.0.1", 8888);
+
+  }
+
+  @override
+  void dispose(){
+    _link.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +45,7 @@ class _ControlPageState extends State<ControlPage> {
                 setState(() {
                   _x = x;
                   _y = y; // _xと_yに代入
+                  _state.setStick(x, y);
                 });
               },
             ),
