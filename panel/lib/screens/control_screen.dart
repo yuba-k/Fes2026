@@ -89,7 +89,7 @@ class _ControlPageState extends State<ControlPage> {
                   )
                 ),
                 Joystick(
-                  size: 200,
+                  size: 280,
                   onChanged: (x, y) {
                     setState(() {
                       _x = x;
