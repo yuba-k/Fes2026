@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../widgets/joystick.dart';
 import '../control_state.dart';
@@ -34,35 +35,56 @@ class _ControlPageState extends State<ControlPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Robot Control"),
+        centerTitle: true,
+        actions: [
+          ValueListenableBuilder<bool>(
+            valueListenable: _link.connected,
+            builder: (_, connected, _){
+              return Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: Icon(
+                  Icons.wifi,
+                  color: connected
+                    ? Colors.green
+                    : Colors.red,
+                ),
+              );
+            }
+          )
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SegmentedButton(
-              segments: [
-                ButtonSegment(value: Mode.stop, label:Text("停止")),
-                ButtonSegment(value: Mode.auto, label:Text("自律")),
-                ButtonSegment(value: Mode.remote, label:Text("遠隔")),
-              ],
-              selected: {_state.mode},
-              onSelectionChanged: (set){
-                setState(() {
-                  _state.setMode(set.first);
-                });
-              },
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
-                minimumSize: const Size(200, 60),
-              ),
-              onPressed: () {
-                setState(() {
-                  _state.stop();
-                });
-              },
-              child: const Text("緊急停止"),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Text(
+                      "動作モード",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 12),
+                    SegmentedButton(
+                      segments: [
+                        ButtonSegment(value: Mode.stop, label:Text("停止")),
+                        ButtonSegment(value: Mode.auto, label:Text("自律")),
+                        ButtonSegment(value: Mode.remote, label:Text("遠隔")),
+                      ],
+                      selected: {_state.mode},
+                      onSelectionChanged: (set){
+                        setState(() {
+                          _state.setMode(set.first);
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              )
             ),
             Joystick(
               size: 200,
@@ -74,24 +96,85 @@ class _ControlPageState extends State<ControlPage> {
                 });
               },
             ),
-            Text('X: ${_x.toStringAsFixed(2)}  Y: ${_y.toStringAsFixed(2)}'),
-            ValueListenableBuilder<bool>(
-              valueListenable: _link.connected,
-              builder: (context, connected, child){
-                return Text(connected ? "接続中" : "切断");
-              }
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Chip(
+                  label: Text("X ${_x.toStringAsFixed(2)}"),),
+                  const SizedBox(width: 8),
+                  Chip(
+                    label: Text("Y ${_y.toStringAsFixed(2)}"),
+                  )
+              ],
             ),
-            ValueListenableBuilder(
-              valueListenable: _link.batteryMv,
-              builder: (context, mv, child){
-                return Text(
-                  mv == null ? "電池：--" : "電池：${(mv/1000).toStringAsFixed(2)}V",
-                );
-              }
-            )
+            Card(
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    ValueListenableBuilder<bool>(
+                      valueListenable: _link.connected,
+                      builder: (_, connected, _){
+                        return Row(
+                          children: [
+                            Icon(
+                              Icons.circle, 
+                              size: 12,
+                              color: connected
+                                ? Colors.green
+                                : Colors.red,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              connected ? "接続中" : "切断",
+                            )
+                          ],
+                        );
+                      }
+                    ),
+                    ValueListenableBuilder(
+                      valueListenable: _link.batteryMv,
+                      builder: (_, mv, _){
+                        final voltage = mv == null ? 0 : mv/1000;
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              mv == null
+                                ? "電池：--"
+                                : "電池：${voltage.toStringAsFixed(2)}V"
+                            ),
+                            const SizedBox(height: 8),
+                            LinearProgressIndicator(
+                              value: mv == null
+                                ? 0
+                                : ((mv - 7000)/1400).clamp(0.0, 1.0)
+                            )
+                          ],
+                        );
+                      }
+                    )
+                  ]
+                )
+              )
+            ),
           ],
         ),
       ),
+      floatingActionButton: 
+        FloatingActionButton.extended(
+          backgroundColor: Colors.red,
+          foregroundColor: Colors.white,
+          icon: const Icon(Icons.warning),
+          label: const Text("STOP"),
+          onPressed: (){
+            setState((){
+              _state.stop();
+            });
+          },
+        ),
     );
   }
 }
