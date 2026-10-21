@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../widgets/joystick.dart';
 import '../control_state.dart';
@@ -152,7 +151,7 @@ class _ControlPageState extends State<ControlPage> {
                                 LinearProgressIndicator(
                                   value: mv == null
                                     ? 0
-                                    : ((mv - 7000)/1400).clamp(0.0, 1.0)
+                                    : ((mv - 4000)/1600).clamp(0.0, 1.0)
                                 )
                               ],
                             );
