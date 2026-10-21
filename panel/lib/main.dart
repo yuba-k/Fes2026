@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'widgets/joystick.dart';
 import 'screens/control_screen.dart';
 void main(){
   runApp(const MyApp());
@@ -11,7 +10,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ControlPage()   // ControlPage()
+      debugShowCheckedModeBanner: false,
+
+      theme: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: Colors.indigo,
+      ),
+
+      darkTheme: ThemeData(
+       useMaterial3: true,
+       brightness: Brightness.dark,
+       colorSchemeSeed: Colors.cyan, 
+      ),
+
+      themeMode: ThemeMode.system,
+
+      home: ControlPage(),
     );
   }
 }
