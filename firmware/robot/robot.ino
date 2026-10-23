@@ -125,6 +125,42 @@ void gaitStep(int vx, int wz){
   }
 }
 
+bool settled() {                         // 8個のサーボが、目標に着いたか
+  for (int i = 0; i < 4; i++) {
+    if (cur[legs[i].shCh] != target[legs[i].shCh]) return false;
+    if (cur[legs[i].elCh] != target[legs[i].elCh]) return false;
+  }
+  return true;
+}
+
+void resetGait() { phase = 0; ampL = 0; ampR = 0; }
+
+void updateMode() {
+  if (mode == 0){ //停止
+    if (standing) { sleepPose(); standing = false; }
+    walking = false;
+    resetGait();
+  }else if (mode == 1) {                       // 遠隔
+    if (!standing) {
+      standPose();
+      standing = true;
+      walking = false;
+      resetGait();
+    } else if (!walking && settled()) {
+      walking = true;                    // 立ち上がり完了後に、歩行を有効にする
+    }
+  } else if (mode == 2) {                // 自律（今は、立つだけ）
+    if (!standing || walking) { standPose(); standing = true; }
+    walking = false;
+    resetGait();
+  } else if (mode == 3){                               // 基準位置
+    standPose();
+    walking = false;
+    standing = true;
+    resetGait();
+  }
+}
+
 void setup() {
   Serial.begin(115200);
   delay(1500);
@@ -173,8 +209,6 @@ void loop() {
           Serial.println(w);
           vx = v;
           wz = w;
-          if(vx == 0 && wz == 0)walking = false;
-          else walking = true;
         }
         mode = m; vx = v; wz = w;
         lastRx = millis();
@@ -206,6 +240,7 @@ void loop() {
 
   if (millis() - lastUpdate >= 20) {
     lastUpdate += 20;
+    updateMode();
     if (walking) { gaitStep(vx, wz); applyServos(8); }
     else         { applyServos(3); }
   }
