@@ -4,6 +4,7 @@
 #include "config.h"
 #include <Wire.h>
 #include <PCA9685.h>
+#include "buzzer.h"
 
 const char SSID[] = WIFI_SSID;
 const char PASS[] = WIFI_PASSWORD;
@@ -188,6 +189,7 @@ void setup() {
     target[legs[i].elCh] = legs[i].elSleep;
   }
   applyServos(3);
+  playMelody(startupMelody, startupMelodyLength);
 }
 
 void loop() {
@@ -244,4 +246,6 @@ void loop() {
     if (walking) { gaitStep(vx, wz); applyServos(8); }
     else         { applyServos(3); }
   }
+
+  updateBuzzer();
 }
