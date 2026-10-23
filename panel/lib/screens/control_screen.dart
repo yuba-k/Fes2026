@@ -72,9 +72,10 @@ class _ControlPageState extends State<ControlPage> {
                         const SizedBox(height: 12),
                         SegmentedButton(
                           segments: [
-                            ButtonSegment(value: Mode.stop, label:Text("停止")),
+                            ButtonSegment(value: Mode.sleep, label:Text("停止")),
                             ButtonSegment(value: Mode.auto, label:Text("自律")),
                             ButtonSegment(value: Mode.remote, label:Text("遠隔")),
+                            ButtonSegment(value: Mode.stand, label:Text("基準位置"))
                           ],
                           selected: {_state.mode},
                           onSelectionChanged: (set){
