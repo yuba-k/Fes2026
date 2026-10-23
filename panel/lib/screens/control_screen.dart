@@ -41,9 +41,10 @@ class _ControlPageState extends State<ControlPage> {
           ValueListenableBuilder<bool>(
             valueListenable: _link.connected,
             builder: (_, connected, _){
-              return Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: Icon(
+              return IconButton(
+                onPressed: (){_link.start("192.168.4.1", 8888);},
+                // padding: const EdgeInsets.only(right: 16),
+                icon: Icon(
                   Icons.wifi,
                   color: connected
                     ? Colors.green
