@@ -36,14 +36,20 @@ class RobotLink {
     _port = port;
     final socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
     _socket = socket;
-    socket.listen((event){
-      if(event == RawSocketEvent.read){
-        final d = socket.receive();
-        if(d != null){
-          _handlePacket(utf8.decode(d.data, allowMalformed: true).trim());
+    socket.listen(
+      (event){
+        if(event == RawSocketEvent.read){
+          final d = socket.receive();
+          if(d != null){
+            _handlePacket(utf8.decode(d.data, allowMalformed: true).trim());
+          }
         }
-      }
-    });
+      },
+      onError: (Object error, StackTrace stacktrace){
+        stop();
+        start(host, port);
+      },
+    );
     _timer = Timer.periodic(const Duration(milliseconds: 50), (_){
       String data = state.toPacket();
       try{

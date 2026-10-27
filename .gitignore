@@ -3,3 +3,4 @@ ArduinoLibrary/
 firmware/setting.txt
 firmware/robot/config.h
 walking_test
+firmware/robot/melody.h

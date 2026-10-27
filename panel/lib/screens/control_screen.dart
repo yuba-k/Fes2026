@@ -41,9 +41,10 @@ class _ControlPageState extends State<ControlPage> {
           ValueListenableBuilder<bool>(
             valueListenable: _link.connected,
             builder: (_, connected, _){
-              return Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: Icon(
+              return IconButton(
+                onPressed: (){_link.start("192.168.4.1", 8888);},
+                // padding: const EdgeInsets.only(right: 16),
+                icon: Icon(
                   Icons.wifi,
                   color: connected
                     ? Colors.green
@@ -72,9 +73,10 @@ class _ControlPageState extends State<ControlPage> {
                         const SizedBox(height: 12),
                         SegmentedButton(
                           segments: [
-                            ButtonSegment(value: Mode.stop, label:Text("停止")),
+                            ButtonSegment(value: Mode.sleep, label:Text("停止")),
                             ButtonSegment(value: Mode.auto, label:Text("自律")),
                             ButtonSegment(value: Mode.remote, label:Text("遠隔")),
+                            ButtonSegment(value: Mode.stand, label:Text("基準位置"))
                           ],
                           selected: {_state.mode},
                           onSelectionChanged: (set){
